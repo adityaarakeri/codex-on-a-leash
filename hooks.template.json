@@ -1,0 +1,92 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 REPLACE_HOOK_ROOT/session_bootstrap.py",
+            "timeout": 3,
+            "statusMessage": "Loading Codex leash policy"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 REPLACE_HOOK_ROOT/prompt_guard.py",
+            "timeout": 2,
+            "statusMessage": "Scanning prompt for risky intent"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 REPLACE_HOOK_ROOT/bash_guard.py",
+            "timeout": 3,
+            "statusMessage": "Checking Bash command"
+          }
+        ]
+      },
+      {
+        "matcher": "apply_patch|MCP|mcp__.*|local_function",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 REPLACE_HOOK_ROOT/tool_guard.py",
+            "timeout": 3,
+            "statusMessage": "Checking non-Bash tool input"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "Bash|apply_patch|MCP|mcp__.*|local_function",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 REPLACE_HOOK_ROOT/tool_guard.py",
+            "timeout": 3,
+            "statusMessage": "Checking permission request"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 REPLACE_HOOK_ROOT/bash_audit.py",
+            "async": true,
+            "timeout": 2,
+            "statusMessage": "Recording Bash audit trail"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 REPLACE_HOOK_ROOT/stop_validator.py",
+            "timeout": 10,
+            "statusMessage": "Running final Codex leash checks"
+          }
+        ]
+      }
+    ]
+  }
+}

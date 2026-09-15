@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Local Codex configuration and generated audit logs. Keep .codex/hooks/*.py
+# and other project-managed hook sources trackable.
+.codex/config.toml
+.codex/hooks.json
+.codex/command-audit.log
+.codex/*.log
+
+CHECKLIST.md
